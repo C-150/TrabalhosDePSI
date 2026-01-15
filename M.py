@@ -13,7 +13,7 @@ def gerar_sigla(frase):
 
 def obter_signo(dia, mes):
 
-    # Lógica simplificada para determinar o signo
+    # signos
     if (mes == 3 and dia >= 21) or (mes == 4 and dia <= 19): return "Carneiro"
     if (mes == 4 and dia >= 20) or (mes == 5 and dia <= 20): return "Touro"
     if (mes == 5 and dia >= 21) or (mes == 6 and dia <= 20): return "Gémeos"
@@ -43,7 +43,7 @@ while True:
 
         try:
             # Converte a string em data real
-            data_nasc = datetime.strptime(data_input, "%d/%m/%Y")
+            data_nasc = datetime.strptime(data_input, "d/m/Y")
             hoje = datetime.now()
 
             # 1. Cálculo da Idade
@@ -67,4 +67,5 @@ while True:
 
     elif opcao == "2":
         print("Programa encerrado.")
+
         break
