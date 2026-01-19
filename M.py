@@ -9,21 +9,26 @@ from datetime import datetime
 FICHEIRO = "perfis.txt"
 
 
-def gerar_sigla(nome):
-    palavras = nome.split()
-    return "".join(p[0].upper() for p in palavras if p)
-
-
-def gerar_sigla_primeiro_ultimo(nome):
+def gerar_siglas(nome, signo):
     partes = nome.split()
+
+    siglas = []
+
+    # Sigla completa (DFS)
+    sigla_completa = "".join(p[0].upper() for p in partes if p)
+    siglas.append(sigla_completa)
+
+    # Sigla curta (DF)
     if len(partes) >= 2:
-        return partes[0][0].upper() + partes[-1][0].upper()
-    return partes[0][0].upper()
+        siglas.append(partes[0][0].upper() + partes[-1][0].upper())
+    else:
+        siglas.append(partes[0][0].upper())
 
+    # Nickname como sigla
+    primeiro_nome = partes[0].lower()
+    siglas.append(f"{primeiro_nome}_{signo.lower()}")
 
-def gerar_nickname(nome, signo):
-    primeiro_nome = nome.split()[0].lower()
-    return f"{primeiro_nome}_{signo.lower()}"
+    return siglas
 
 
 def obter_signo(dia, mes):
@@ -41,9 +46,9 @@ def obter_signo(dia, mes):
     return "Peixes"
 
 
-def guardar_perfil(dados):
+def guardar_perfil(linha):
     with open(FICHEIRO, "a", encoding="utf-8") as f:
-        f.write(dados + "\n")
+        f.write(linha + "\n")
 
 
 def mostrar_perfis():
@@ -78,23 +83,20 @@ while True:
             )
 
             signo = obter_signo(data_nasc.day, data_nasc.month)
-
-            sigla_completa = gerar_sigla(nome)
-            sigla_curta = gerar_sigla_primeiro_ultimo(nome)
-            nickname = gerar_nickname(nome, signo)
+            siglas = gerar_siglas(nome, signo)
 
             print("\n" + "—" * 30)
-            print("RESUMO DO PERFIL:")
-            print(f"Nome:           {nome}")
-            print(f"Sigla completa: {sigla_completa}")
-            print(f"Sigla curta:    {sigla_curta}")
-            print(f"Nickname:       {nickname}")
-            print(f"Idade:          {idade} anos")
-            print(f"Signo:          {signo}")
+            print("RESUMO DO PERFIL")
+            print(f"Nome:  {nome}")
+            print(f"Idade: {idade} anos")
+            print(f"Signo: {signo}")
+            print("\nSIGLAS:")
+            for s in siglas:
+                print(f"- {s}")
             print("—" * 30)
 
             guardar_perfil(
-                f"{nome} | {sigla_completa} | {sigla_curta} | {nickname} | {idade} | {signo}"
+                f"{nome} | {idade} | {signo} | {' / '.join(siglas)}"
             )
 
         except ValueError:
