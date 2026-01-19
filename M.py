@@ -6,14 +6,27 @@ from datetime import datetime
 # Autor: Diogo Fernandes
 # ==========================================
 
-def gerar_sigla(frase):
-    palavras = frase.split()
-    return "".join([p[0].upper() for p in palavras if len(p) > 0])
+FICHEIRO = "perfis.txt"
+
+
+def gerar_sigla(nome):
+    palavras = nome.split()
+    return "".join(p[0].upper() for p in palavras if p)
+
+
+def gerar_sigla_primeiro_ultimo(nome):
+    partes = nome.split()
+    if len(partes) >= 2:
+        return partes[0][0].upper() + partes[-1][0].upper()
+    return partes[0][0].upper()
+
+
+def gerar_nickname(nome, signo):
+    primeiro_nome = nome.split()[0].lower()
+    return f"{primeiro_nome}_{signo.lower()}"
 
 
 def obter_signo(dia, mes):
-
-    # signos
     if (mes == 3 and dia >= 21) or (mes == 4 and dia <= 19): return "Carneiro"
     if (mes == 4 and dia >= 20) or (mes == 5 and dia <= 20): return "Touro"
     if (mes == 5 and dia >= 21) or (mes == 6 and dia <= 20): return "Gémeos"
@@ -28,11 +41,26 @@ def obter_signo(dia, mes):
     return "Peixes"
 
 
+def guardar_perfil(dados):
+    with open(FICHEIRO, "a", encoding="utf-8") as f:
+        f.write(dados + "\n")
+
+
+def mostrar_perfis():
+    try:
+        with open(FICHEIRO, "r", encoding="utf-8") as f:
+            print("\n--- PERFIS GUARDADOS ---")
+            print(f.read())
+    except FileNotFoundError:
+        print("Ainda não existem perfis guardados.")
+
+
 # ---------------- MENU ----------------
 while True:
     print("\n===== ANALISADOR DE PERFIL =====")
-    print("1 - Gerar Sigla e Analisar Dados")
-    print("2 - Sair")
+    print("1 - Criar perfil")
+    print("2 - Ver perfis guardados")
+    print("3 - Sair")
     print("--------------------------------")
 
     opcao = input("Escolha uma opção: ")
@@ -42,30 +70,39 @@ while True:
         data_input = input("Digite a data de nascimento (DD/MM/AAAA): ")
 
         try:
-            # Converte a string em data real
-            data_nasc = datetime.strptime(data_input, "d/m/Y")
+            data_nasc = datetime.strptime(data_input, "%d/%m/%Y")
             hoje = datetime.now()
 
-            # 1. Cálculo da Idade
-            idade = hoje.year - data_nasc.year - ((hoje.month, hoje.day) < (data_nasc.month, data_nasc.day))
+            idade = hoje.year - data_nasc.year - (
+                (hoje.month, hoje.day) < (data_nasc.month, data_nasc.day)
+            )
 
-            # 2. Obter Signo
             signo = obter_signo(data_nasc.day, data_nasc.month)
 
-            # 3. Gerar Sigla
-            sigla = gerar_sigla(nome)
+            sigla_completa = gerar_sigla(nome)
+            sigla_curta = gerar_sigla_primeiro_ultimo(nome)
+            nickname = gerar_nickname(nome, signo)
 
             print("\n" + "—" * 30)
-            print(f"RESUMO DO PERFIL:")
-            print(f"Iniciais: {sigla}")
-            print(f"Idade:    {idade} anos")
-            print(f"Signo:    {signo}")
+            print("RESUMO DO PERFIL:")
+            print(f"Nome:           {nome}")
+            print(f"Sigla completa: {sigla_completa}")
+            print(f"Sigla curta:    {sigla_curta}")
+            print(f"Nickname:       {nickname}")
+            print(f"Idade:          {idade} anos")
+            print(f"Signo:          {signo}")
             print("—" * 30)
+
+            guardar_perfil(
+                f"{nome} | {sigla_completa} | {sigla_curta} | {nickname} | {idade} | {signo}"
+            )
 
         except ValueError:
             print("Erro: Use o formato DD/MM/AAAA (ex: 15/05/2000)")
 
     elif opcao == "2":
-        print("Programa encerrado.")
+        mostrar_perfis()
 
+    elif opcao == "3":
+        print("Programa encerrado.")
         break
