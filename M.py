@@ -14,11 +14,11 @@ def gerar_siglas(nome, signo):
 
     siglas = []
 
-    # Sigla completa (DFS)
+    # Sigla completa 
     sigla_completa = "".join(p[0].upper() for p in partes if p)
     siglas.append(sigla_completa)
 
-    # Sigla curta (DF)
+    # Sigla curta 
     if len(partes) >= 2:
         siglas.append(partes[0][0].upper() + partes[-1][0].upper())
     else:
@@ -108,3 +108,4 @@ while True:
     elif opcao == "3":
         print("Programa encerrado.")
         break
+
