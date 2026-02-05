@@ -1,4 +1,4 @@
-# lista onde os nomes vão ficar guardados
+
 nomes = []
 
 while True:
@@ -17,7 +17,7 @@ while True:
 
     # ADICIONAR
     if opcao == "1":
-        nome = input("Digite o nome a adicionar: ").strip()
+        nome = input("Digite o nome a adicionar: ")
         if nome == "":
             print("Nome inválido.")
         elif nome in nomes:
@@ -70,3 +70,4 @@ while True:
 
     else:
         print("Opção inválida. Tente novamente.")
+
