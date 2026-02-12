@@ -22,7 +22,7 @@ while True:
     op = input("Escolha uma opcao: ")
 
     if op == '1':
-        nome = input("Nome do aluno: ").strip().title()
+        nome = input("Nome do aluno: ")
         if nome == "" or nome.isdigit():
             print("Nome invalido.")
             continue
@@ -33,7 +33,7 @@ while True:
                 try:
                     nota = float(input(f"Nota a {disciplina} (0 a 20): "))
                     if 0 <= nota <= 20:
-                        notas[disciplina] = nota
+                        notas[disciplina] = nota # guarda a disciplina do dicionario com o valor da nota
                         break
                     else:
                         print("A nota deve estar entre 0 e 20.")
@@ -59,12 +59,12 @@ while True:
         turma.append(aluno)
         print("Aluno adicionado com sucesso.")
 
-    elif op == '2' and len(turma) > 0:
-        nome = input("Nome do aluno a procurar: ").title()
+    elif op == '2' and len(turma) > 0: #len = é o tamanho da variavél que tiver
+        nome = input("Nome do aluno a procurar: ")
         for aluno in turma:
             if aluno["nome"] == nome:
                 print(f"\nAluno: {aluno['nome']}")
-                for tipo, valor in aluno["faltas"].items():
+                for tipo, valor in aluno["faltas"].items(): # itens é as chaves do dicionario de faltas dentro do dicionario do aluno
                     print(f"{tipo}: {valor}")
                 for disciplina in disciplinas_definidas:
                     print(f"{disciplina}: {aluno['disciplinas'][disciplina]}")
@@ -74,7 +74,7 @@ while True:
             print("Aluno nao encontrado.")
 
     elif op == '3' and len(turma) > 0:
-        nome = input("Nome do aluno a remover: ").title()
+        nome = input("Nome do aluno a remover: ")
         for aluno in turma:
             if aluno["nome"] == nome:
                 confirmacao = input("Quer remover o aluno? (Sim ou Nao): ").lower()
@@ -95,7 +95,7 @@ while True:
             print(f"{aluno['nome']} | Media: {media:.2f} | Comportamento: {aluno['comportamento']} | Avaliacao final: {avaliacao_final:.2f}")
 
     elif op == '5' and len(turma) > 0:
-        nome = input("Nome do aluno: ").title()
+        nome = input("Nome do aluno: ")
         for aluno in turma:
             if aluno["nome"] == nome:
                 for tipo in aluno["faltas"]:
@@ -115,16 +115,16 @@ while True:
             print("Aluno nao encontrado.")
 
     elif op == '6' and len(turma) > 0:
-        nome = input("Nome do aluno: ").title()
+        nome = input("Nome do aluno: ")
         for aluno in turma:
             if aluno["nome"] == nome:
-                disc = input("Disciplina a editar: ").title()
+                disc = input("Disciplina a editar: ")
                 if disc in aluno["disciplinas"]:
                     while True:
                         try:
                             nova = float(input("Nova nota (0 a 20): "))
                             if 0 <= nova <= 20:
-                                aluno["disciplinas"][disc] = nova
+                                aluno["disciplinas"] = nova
                                 print("Nota atualizada.")
                                 break
                             else:
@@ -142,7 +142,7 @@ while True:
             menor = 21
             quantidade = 0
             for aluno in turma:
-                nota = aluno["disciplinas"][disciplina]
+                nota = float(aluno["disciplinas"][disciplina])
                 soma += nota
                 quantidade += 1
                 if nota > maior:
